@@ -8,12 +8,13 @@
 import Foundation
 import SwiftData
 import Combine
+import Jaal
 
 
 enum WeatherDetailsViewState {
   case empty
   case loading
-  case error
+  case error(String)
   case data(WeatherDetails)
 }
 
@@ -78,11 +79,20 @@ class WeatherDetailsViewModel: ObservableObject {
     repository.getWeatherDetail(query: location.latAndLong, days: 5, hour: 10)
       .map { WeatherDetailsDataBuilder.build(response: $0) }
       .sink { error in
-        print(error)
+        self.handleCompition(error: error)
       } receiveValue: { [weak self] details in
         self?.updateViewState(details: details)
       }
       .store(in: &cancellables)
+  }
+  
+  private func handleCompition(error: Subscribers.Completion<JaalError>) {
+    switch error {
+    case .finished:
+      print("Compition")
+    case let .failure(error):
+      viewState = .error(error.localizedDescription)
+    }
   }
   
   private func updateViewState(details: WeatherDetails) {
@@ -132,7 +142,7 @@ extension WeatherDetailsResponse {
       FutureForecastInfoViewModel(
         id: $0.dateEpoch,
         date: $0.date.dayOfWeek() ?? $0.date,
-        imageCode: "\($0.day.condition.code)",
+        imageCode: "\(WeatherConditionIcon.getImageIcon(code: $0.day.condition.code))",
         minTemp: $0.day.mintempC,
         maxTemp: $0.day.maxtempC
       )

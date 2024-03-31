@@ -2,45 +2,62 @@
 //  WeatherSearch.swift
 //  WeatherApp
 //
-//  Created by Priyadarshan Meshram on 27/03/24.
+//  Created by Priyadarshan Meshram on 28/03/24.
 //
 
 import SwiftUI
 
 struct WeatherSearchView: View {
+  @Environment(\.modelContext) private var modelContext
+  @ObservedObject private var viewModel: WeatherSearchViewModel
   
-  @StateObject var viewModel = WeatherSearchViewModel()
+  init(viewModel: WeatherSearchViewModel) {
+    self.viewModel = viewModel
+  }
   
-  @State var searchString: String = ""
   var body: some View {
     NavigationStack {
       List {
-        ForEach(viewModel.list) { info in
-          switch info {
-          case let .local(value):
-            WeatherSearchView()
-          case let .search(value):
-            CityNameCard(name: value)
+        ForEach(viewModel.list) { location in
+          
+          NavigationLink {
+            WeatherDetailsView(viewModel: WeatherDetailsViewModel(modelContext: modelContext, location: location))
+          } label: {
+            switch location {
+            case let .local(localLocation):
+              WeatherCityInfoCard(viewModel: localLocation.toWeatherCityInfoCardViewModel)
+            case let .search(location):
+              CityNameCard(name: location.locationName)
+            }
           }
+          
         }
         .onDelete(perform: { indexSet in
-          
+          viewModel.deleteItem(offsets: indexSet)
         })
-        .deleteDisabled(true)
+        .deleteDisabled(!viewModel.canDelete)
       }
-//      .overlay(content: {
-//        ContentUnavailableView(Localization.searchContentEmptyState, systemImage: "cloud.sun.rain.fill")
-//          .dynamicTypeSize(.xSmall)
-//            .foregroundStyle(.gray)
-//            .padding(.bottom, 200)
-//      })
+      .overlay(content: {
+        switch viewModel.viewState {
+        case .data:
+          EmptyView()
+        case .empty:
+          ContentUnavailableView(Localization.searchContentEmptyState, systemImage: "cloud.sun.rain.fill")
+            .dynamicTypeSize(.xSmall)
+              .foregroundStyle(.gray)
+              .padding(.bottom, 200)
+        }
+      })
       .listStyle(.plain)
-      .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always), prompt: Localization.searchCityPlaceholder)
+      .searchable(text: $viewModel.searchQuery, placement: .navigationBarDrawer(displayMode: .automatic), prompt: Localization.searchCityPlaceholder)
       .navigationTitle(Text("Weather App"))
+      .onAppear {
+        viewModel.bindSearchQuery()
+      }
     }
   }
 }
 
-#Preview {
-  WeatherSearchView()
-}
+//#Preview {
+//  WeatherSearchView(viewModel: WeatherSearchViewModel(modelContext: ))
+//}

@@ -22,9 +22,11 @@ struct WeatherDetailsView: View {
       case .empty:
         EmptyView()
       case .loading:
+        //TODO: Custome Progress view and use
         ProgressView()
-      case .error:
-        ContentUnavailableView.search
+      case let .error(error):
+        //TODO: Custome Error view and use
+        ContentUnavailableView.search(text: error)
       case let .data( weatherDetails):
         getDetailView(details: weatherDetails)
       }

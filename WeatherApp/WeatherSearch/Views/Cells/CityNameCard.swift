@@ -2,7 +2,7 @@
 //  CityNameCard.swift
 //  WeatherApp
 //
-//  Created by Priyadarshan Meshram on 27/03/24.
+//  Created by Priyadarshan Meshram on 28/03/24.
 //
 
 import SwiftUI

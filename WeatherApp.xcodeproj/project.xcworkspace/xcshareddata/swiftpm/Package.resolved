@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "jaal",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/iampriyadarshan/Jaal",
+      "state" : {
+        "branch" : "main",
+        "revision" : "9f891e2cfece9b936b1a7f11821cba803ff52712"
+      }
+    }
+  ],
+  "version" : 2
+}

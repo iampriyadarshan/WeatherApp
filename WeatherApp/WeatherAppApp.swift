@@ -2,17 +2,18 @@
 //  WeatherAppApp.swift
 //  WeatherApp
 //
-//  Created by Priyadarshan Meshram on 27/03/24.
+//  Created by Priyadarshan Meshram on 28/03/24.
 //
 
 import SwiftUI
 import SwiftData
 
+
 @main
 struct WeatherAppApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+          WeatherDetailsDataModel.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -25,7 +26,7 @@ struct WeatherAppApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+          WeatherSearchView(viewModel: WeatherSearchViewModel(modelContext: sharedModelContainer.mainContext))
         }
         .modelContainer(sharedModelContainer)
     }

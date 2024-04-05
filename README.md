@@ -6,12 +6,27 @@ It utilizes the WeatherAPI service (https://www.weatherapi.com/login.aspx) to fe
 Key Features:
 
 Instant access to current weather conditions.
+
 Search functionality to find weather information for any location.
+
 User-friendly interface designed with SwiftUI for a seamless experience.
+
+.
+
+.
+
+.
+
+.
+
 
 
 **Using:** 
+
 SwiftUI
+
 SwiftData
+
 MVVM Architecture
+
 Dependency Injection

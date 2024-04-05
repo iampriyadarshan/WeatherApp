@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WeatherSearchView: View {
   @Environment(\.modelContext) private var modelContext
+  
   @ObservedObject private var viewModel: WeatherSearchViewModel
   
   init(viewModel: WeatherSearchViewModel) {
@@ -19,7 +20,6 @@ struct WeatherSearchView: View {
     NavigationStack {
       List {
         ForEach(viewModel.list) { location in
-          
           NavigationLink {
             WeatherDetailsView(viewModel: WeatherDetailsViewModel(modelContext: modelContext, location: location))
           } label: {

@@ -26,6 +26,7 @@ enum AddRemoveButtonState {
 class WeatherDetailsViewModel: ObservableObject {
   
   @Injected(\.weatherDetailRepository) private var repository: WeatherDetailsRepositoryType
+  
   @Published var viewState: WeatherDetailsViewState = .empty
   @Published var addRemoveButtonState: AddRemoveButtonState = .add
   
